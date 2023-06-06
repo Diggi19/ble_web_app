@@ -1,0 +1,21 @@
+.drawer_container{
+    width: 100vw;
+    height: 50px;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    border-top: 1px solid rgb(246, 162, 52);
+}
+.icon_holder{
+    width: 100px;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.icon{
+    color: rgb(144, 141, 141);
+}
+.icon_active{
+    color: rgb(246, 162, 52);
+}
