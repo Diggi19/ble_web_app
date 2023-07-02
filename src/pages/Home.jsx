@@ -32,6 +32,7 @@ function Home({activeDrawer,setactiveDrawer}) {
 
   //Disconnect Event handler
   const connectClick = () => {
+    console.log(deviceCache,"hiiiii")
     connect();
   };
   //Disconnect Event handler
@@ -41,16 +42,13 @@ function Home({activeDrawer,setactiveDrawer}) {
   //Receive response Event handler
   const handleClick = (e) => {
     e.preventDefault()
-    var i = 0
-    while (i < 10) {
-      console.log(e.target.value)
-      i+=1
-    }
+    console.log(e.target.value)
     // send(e.target.value);
   };
 
   // Launch Bluetooth device chooser and connect to the selected
   function connect() {
+    console.log(deviceCache,"this is updated devicecache")
     return (
       (deviceCache ? Promise.resolve(deviceCache) : requestBluetoothDevice())
         .then((device) => connectDeviceAndCacheCharacteristic(device))
@@ -63,12 +61,15 @@ function Home({activeDrawer,setactiveDrawer}) {
     console.log("Requesting bluetooth device...");
     return navigator.bluetooth
       .requestDevice({
-        filters: [{ services: [0xffe0] }],
+        // filters: [{ services: [0xffe0] }],
+        acceptAllDevices:true,
+        optionalServices:['battery_service']
       })
       .then((device) => {
         console.log('"' + device.name + '" bluetooth device selected');
         setdeviceCache(device);
-
+        console.log(device)
+        console.log(device.gatt)
         return deviceCache;
       });
   }

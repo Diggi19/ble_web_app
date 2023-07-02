@@ -71,12 +71,12 @@ const Reminder = ({activeDrawer,setactiveDrawer}) => {
           <form onSubmit={handleTaskCreate}>
               {/* date time  */}
             <div className='date_time_holder'>
-              <input type='date' value={date} onChange={(e)=>setdate(e.target.value)}/>
-              <input type='time' value={time} onChange={(e)=>settime(e.target.value)}/>
+              <input type='date' value={date} onChange={(e)=>setdate(e.target.value)} placeholder='Select Date'/>
+              <input type='time' value={time} onChange={(e)=>settime(e.target.value)} placeholder='Select Time'/>
             </div>
             {/* textfield */}
             <div className='text_holder'>
-              <input type='text' value={task} onChange={((e)=>settask(e.target.value))}/>
+              <input type='text' value={task} onChange={((e)=>settask(e.target.value))} placeholder='Enter Task'/>
             </div>
             {/* btn */}
             <div className='button_holder'>
