@@ -40,9 +40,9 @@ function Home({activeDrawer,setactiveDrawer}) {
     disconnect();
   };
   //Receive response Event handler
-  const handleClick = (e) => {
-    e.preventDefault()
-    console.log(e.target.value)
+  const handleClick = (command) => {
+    
+    console.log(command)
     // send(e.target.value);
   };
 
@@ -63,7 +63,7 @@ function Home({activeDrawer,setactiveDrawer}) {
       .requestDevice({
         // filters: [{ services: [0xffe0] }],
         acceptAllDevices:true,
-        optionalServices:['battery_service']
+        
       })
       .then((device) => {
         console.log('"' + device.name + '" bluetooth device selected');
@@ -159,30 +159,30 @@ function Home({activeDrawer,setactiveDrawer}) {
           {/* control button */}
           <div className="control_btn_holder">
               {deviceCache && (
-                <button className="ctrl_btn" value={"F"} onClick={handleClick}>
+                <button className="ctrl_btn" value={"F"} onClick={()=>send("F")}>
                   <KeyboardArrowUpIcon style={{width:"50px",height:"50px",color:"black"}}/>
                 </button>
               )}
               <div className="control_btn_holder_middle">
                   {deviceCache && (
-                    <button className="ctrl_btn" value={"L"} onClick={handleClick}>
+                    <button className="ctrl_btn" value={"L"} onClick={()=>send("L")}>
                       <KeyboardArrowLeftIcon style={{width:"50px",height:"50px",color:"black"}}/>
                     </button>
                   )}
                   {deviceCache && (
-                    <button className="ctrl_btn" value={"S"} onClick={handleClick}>
+                    <button className="ctrl_btn" value={"S"} onClick={()=>send("S")}>
                       <CancelIcon style={{width:"50px",height:"50px",color:"black"}}/>
                     </button>
                   )}
                   {deviceCache && (
-                    <button className="ctrl_btn" value={"R"} onClick={handleClick}>
+                    <button className="ctrl_btn" value={"R"} onClick={()=>send("R")}>
                       <KeyboardArrowRightIcon style={{width:"50px",height:"50px",color:"black"}}/>
                     </button>
                   )}
 
               </div>
               {deviceCache && (
-                <button className="ctrl_btn" value={"B"} onClick={handleClick}>
+                <button className="ctrl_btn" value={"B"} onClick={()=>send("B")}>
                   <KeyboardArrowDownIcon style={{width:"50px",height:"50px",color:"black"}}/>
                 </button>
               )}
