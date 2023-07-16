@@ -17,19 +17,6 @@ function Home({ activeDrawer, setactiveDrawer }) {
   const [characteristicCache, setcharacteristicCache] = useState(null);
   const navigate = useNavigate();
 
-  // permissions
-  // React.useEffect(() => {
-  //   Notification.requestPermission().then(perm => {
-  //     if (perm == "granted") {
-  //       new Notification("Welcome to buddy chair", {
-  //         icon: "https://cdn.pixabay.com/photo/2017/05/15/21/58/drug-icon-2316244_960_720.png",
-  //         body: "Hello user we are glad to have you on board."
-  //       })
-  //     }
-  //   })
-  // }, [])
-
-
   //Disconnect Event handler
   const connectClick = () => {
     console.log(deviceCache, "hiiiii")
