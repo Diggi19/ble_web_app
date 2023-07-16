@@ -33,6 +33,7 @@
 .home_buttons{
     width: 100%;
     height: 95vh;
+    margin-top: -2em;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -71,7 +72,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    margin-top: 6em;
+    margin-top: 2em;
 }
 .control_btn_holder_middle{
     display: flex;

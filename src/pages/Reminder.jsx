@@ -1,9 +1,13 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+// import {messaging} from '../firebase'
+// import {getToken} from 'firebase/messaging'
 import './reminder.css'
 import Drawer from '../components/Drawer'
 //icons
 import PersonIcon from '@mui/icons-material/Person';
 import EditNoteIcon from '@mui/icons-material/EditNote';
+import axios from 'axios';
+import TaskNotification from '../components/TaskNotification';
 
 
 
@@ -13,7 +17,25 @@ const Reminder = ({activeDrawer,setactiveDrawer}) => {
   const[time,settime] = React.useState("")
   const[task,settask] = React.useState("")
   const[taskList,settaskList] = React.useState([])
+  const[isTokenFound,setTokenFound] = React.useState(false)
   
+  // notification
+  // const requestPermisiion = async()=>{
+  //   const permisiion = await Notification.requestPermission()
+  //   if (permisiion === "granted") {
+  //     // generate token
+  //     const token = await getToken(messaging,{vapidKey:"BEYOX73u8I3Z4HqlxbAzVLtcwGEWeRKxD_FBxgNLX643RtCx1wqRWiIRVc_e0U2ftjCsbS4ETtIxFh9JFQ477Uk"})
+  //     console.log("token generated",token)
+
+  //   }else if (permisiion === "denied") {
+  //     alert("you denied notification")
+  //   }
+  // }
+  // useEffect(()=>{
+  //   requestPermisiion()
+  // },[])
+  
+
   // setInterval(() => {
   //   let d = new Date()
   //   let timeNow = d.getHours() + ":" + d.getMinutes()
@@ -23,16 +45,44 @@ const Reminder = ({activeDrawer,setactiveDrawer}) => {
   //   }
   // }, 1000);
 
+  // implementing firebase notification
+
+
+  // implementing notification using node js
+  // let count = 0
+  // if (count != 2) {
+  //   setInterval(() => {
+  //     axios.get("http://localhost:5000/notificationCheck")
+  //       .then((result) => {
+  //         console.log(result)
+  //         count +=1
+  //       }).catch((err) => {
+  //         console.log(err)      
+  //       });
+  //     // new Notification("Welcome to buddy chair", {
+  //     //   icon: "https://cdn.pixabay.com/photo/2017/05/15/21/58/drug-icon-2316244_960_720.png",
+  //     //   body: "Hello user we are glad to have you on board."
+  //     // })
+  //   }, 8000);
+    
+  // } else{
+  //   console.log("entry over")
+  // }
+
+  // implementing notification using localstorage
+
 
   const handleTaskCreate=(e)=>{
     e.preventDefault()
-    console.log(date,time,task)
-    let newTask = {
-      "date":date,
-      "time":time,
-      "task":task
-    }
-    settaskList([...taskList,newTask])
+    // console.log(date,time,task)
+    const formattedDateTime = date + " " + time
+    axios.post("https://attractive-gray-moth.cyclic.app/addReminder",{reminderMsg:task,time:time,remindAt:formattedDateTime})
+      .then((result) => {
+        console.log(result)
+        getData()
+      }).catch((err) => {
+        console.log(err)
+      });
     settoggleModal(false)
   }
 
@@ -43,12 +93,25 @@ const Reminder = ({activeDrawer,setactiveDrawer}) => {
     settoggleModal(true)
   }
 
-  const handleDeleteTask = (task)=>{
-    let filteredlist = taskList.filter((item)=>item.task !== task )
-    settaskList(filteredlist)
+  const getData = ()=>{
+    axios.get("https://attractive-gray-moth.cyclic.app/allReminders")
+      .then((result) => {
+        settaskList(result.data)
+      }).catch((err) => {
+        console.log(err)
+      });
   }
+  useEffect(()=>{
+    getData()
+  },[])
 
+  useEffect(()=>{
+    if (taskList.length > 0) {
+      console.log(taskList)
+    }
+  },[])
 
+  console.log(taskList)
   return (
     <div className='reminder_container'>
       <div className="reminder_header">
@@ -58,11 +121,7 @@ const Reminder = ({activeDrawer,setactiveDrawer}) => {
         {/* task list */}
         {!toggleModal &&  <div className='reminder_list'>
           {taskList.length > 0 ? taskList.map((item,id)=>(
-            <div className='task_body'>
-              <p className='task_close' onClick={()=>handleDeleteTask(item.task)}>❌</p>
-              <p className='task_text'>{item.task}</p>
-              <p className='task_time'>{item.time}</p>
-            </div>
+            <TaskNotification data={item} settaskList={settaskList} taskList={taskList}/>
           )):<div>
               no task scheduled
             </div>}
@@ -96,3 +155,7 @@ const Reminder = ({activeDrawer,setactiveDrawer}) => {
 }
 
 export default Reminder
+
+
+
+

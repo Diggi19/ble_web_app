@@ -12,27 +12,27 @@ import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import CancelIcon from '@mui/icons-material/Cancel';
 
-function Home({activeDrawer,setactiveDrawer}) {
+function Home({ activeDrawer, setactiveDrawer }) {
   const [deviceCache, setdeviceCache] = useState("");
   const [characteristicCache, setcharacteristicCache] = useState(null);
   const navigate = useNavigate();
-  
+
   // permissions
-  React.useEffect(()=>{
-    Notification.requestPermission().then(perm =>{
-      if (perm == "granted") {
-        new Notification("Welcome to buddy chair",{
-          icon:"https://cdn.pixabay.com/photo/2017/05/15/21/58/drug-icon-2316244_960_720.png",
-          body:"Hello user we are glad to have you on board."
-        })
-      }
-    })
-  },[])
+  // React.useEffect(() => {
+  //   Notification.requestPermission().then(perm => {
+  //     if (perm == "granted") {
+  //       new Notification("Welcome to buddy chair", {
+  //         icon: "https://cdn.pixabay.com/photo/2017/05/15/21/58/drug-icon-2316244_960_720.png",
+  //         body: "Hello user we are glad to have you on board."
+  //       })
+  //     }
+  //   })
+  // }, [])
 
 
   //Disconnect Event handler
   const connectClick = () => {
-    console.log(deviceCache,"hiiiii")
+    console.log(deviceCache, "hiiiii")
     connect();
   };
   //Disconnect Event handler
@@ -41,14 +41,13 @@ function Home({activeDrawer,setactiveDrawer}) {
   };
   //Receive response Event handler
   const handleClick = (command) => {
-    
-    console.log(command)
+
+
     // send(e.target.value);
   };
 
   // Launch Bluetooth device chooser and connect to the selected
   function connect() {
-    console.log(deviceCache,"this is updated devicecache")
     return (
       (deviceCache ? Promise.resolve(deviceCache) : requestBluetoothDevice())
         .then((device) => connectDeviceAndCacheCharacteristic(device))
@@ -61,15 +60,12 @@ function Home({activeDrawer,setactiveDrawer}) {
     console.log("Requesting bluetooth device...");
     return navigator.bluetooth
       .requestDevice({
-        // filters: [{ services: [0xffe0] }],
-        acceptAllDevices:true,
-        
+        filters: [{ services: [0xffe0] }],
       })
       .then((device) => {
         console.log('"' + device.name + '" bluetooth device selected');
         setdeviceCache(device);
-        console.log(device)
-        console.log(device.gatt)
+
         return deviceCache;
       });
   }
@@ -137,62 +133,62 @@ function Home({activeDrawer,setactiveDrawer}) {
 
   return (
     <div className="home_container">
-        <div className="home_header">
-            <PersonIcon style={{width:"40px",height:"40px",color:"white",marginLeft:"0.5em"}}/>
-            <p className="header_title">Home</p>
-        </div>
+      <div className="home_header">
+        <PersonIcon style={{ width: "40px", height: "40px", color: "white", marginLeft: "0.5em" }} />
+        <p className="header_title">Home</p>
+      </div>
 
-        <div className="home_buttons">
-          {/* connection button */}
-          <button  className="connect_btn" onClick={connectClick}>
-            <div style={{width:"50px"}}><BluetoothConnectedIcon/></div>
-            Connect
+      <div className="home_buttons">
+        {/* connection button */}
+        <button className="connect_btn" onClick={connectClick}>
+          <div style={{ width: "50px" }}><BluetoothConnectedIcon /></div>
+          Connect
+        </button>
+        <br />
+        {deviceCache && (
+          <button className="disconnect_btn" onClick={disconnectClick}>
+            <div style={{ width: "50px" }}><BluetoothDisabledIcon /></div>
+            Disconnect
           </button>
-          <br />
+        )}
+
+        {/* control button */}
+        <div className="control_btn_holder">
           {deviceCache && (
-            <button className="disconnect_btn" onClick={disconnectClick}>
-              <div style={{width:"50px"}}><BluetoothDisabledIcon/></div>
-              Disconnect
+            <button className="ctrl_btn" value={"F"} onClick={() => send("F")}>
+              <KeyboardArrowUpIcon style={{ width: "50px", height: "50px", color: "black" }} />
+            </button>
+          )}
+          <div className="control_btn_holder_middle">
+            {deviceCache && (
+              <button className="ctrl_btn" value={"L"} onClick={() => send("L")}>
+                <KeyboardArrowLeftIcon style={{ width: "50px", height: "50px", color: "black" }} />
+              </button>
+            )}
+            {deviceCache && (
+              <button className="ctrl_btn" value={"S"} onClick={() => send("S")}>
+                <CancelIcon style={{ width: "50px", height: "50px", color: "black" }} />
+              </button>
+            )}
+            {deviceCache && (
+              <button className="ctrl_btn" value={"R"} onClick={() => send("R")}>
+                <KeyboardArrowRightIcon style={{ width: "50px", height: "50px", color: "black" }} />
+              </button>
+            )}
+
+          </div>
+          {deviceCache && (
+            <button className="ctrl_btn" value={"B"} onClick={() => send("B")}>
+              <KeyboardArrowDownIcon style={{ width: "50px", height: "50px", color: "black" }} />
             </button>
           )}
 
-          {/* control button */}
-          <div className="control_btn_holder">
-              {deviceCache && (
-                <button className="ctrl_btn" value={"F"} onClick={()=>send("F")}>
-                  <KeyboardArrowUpIcon style={{width:"50px",height:"50px",color:"black"}}/>
-                </button>
-              )}
-              <div className="control_btn_holder_middle">
-                  {deviceCache && (
-                    <button className="ctrl_btn" value={"L"} onClick={()=>send("L")}>
-                      <KeyboardArrowLeftIcon style={{width:"50px",height:"50px",color:"black"}}/>
-                    </button>
-                  )}
-                  {deviceCache && (
-                    <button className="ctrl_btn" value={"S"} onClick={()=>send("S")}>
-                      <CancelIcon style={{width:"50px",height:"50px",color:"black"}}/>
-                    </button>
-                  )}
-                  {deviceCache && (
-                    <button className="ctrl_btn" value={"R"} onClick={()=>send("R")}>
-                      <KeyboardArrowRightIcon style={{width:"50px",height:"50px",color:"black"}}/>
-                    </button>
-                  )}
-
-              </div>
-              {deviceCache && (
-                <button className="ctrl_btn" value={"B"} onClick={()=>send("B")}>
-                  <KeyboardArrowDownIcon style={{width:"50px",height:"50px",color:"black"}}/>
-                </button>
-              )}
-
-          </div>
-          <div className="drawer_holder">
-                <Drawer activeDrawer={activeDrawer} setactiveDrawer={setactiveDrawer}/>
-          </div>
-
         </div>
+        <div className="drawer_holder">
+          <Drawer activeDrawer={activeDrawer} setactiveDrawer={setactiveDrawer} />
+        </div>
+
+      </div>
     </div>
   );
 }
