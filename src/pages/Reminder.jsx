@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useContext, useEffect } from 'react'
 // import {messaging} from '../firebase'
 // import {getToken} from 'firebase/messaging'
 import './reminder.css'
@@ -8,6 +8,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import axios from 'axios';
 import TaskNotification from '../components/TaskNotification';
+import { BluetoothContext } from '../context';
 
 
 
@@ -18,7 +19,7 @@ const Reminder = ({activeDrawer,setactiveDrawer}) => {
   const[task,settask] = React.useState("")
   const[taskList,settaskList] = React.useState([])
   const[isTokenFound,setTokenFound] = React.useState(false)
-  
+  const {characteristicCache, setcharacteristicCache,testdata, settestdata} = useContext(BluetoothContext)
   // notification
   // const requestPermisiion = async()=>{
   //   const permisiion = await Notification.requestPermission()
@@ -103,6 +104,7 @@ const Reminder = ({activeDrawer,setactiveDrawer}) => {
   }
   useEffect(()=>{
     getData()
+    console.log(testdata,"testdata")
   },[])
 
   useEffect(()=>{
@@ -121,7 +123,7 @@ const Reminder = ({activeDrawer,setactiveDrawer}) => {
         {/* task list */}
         {!toggleModal &&  <div className='reminder_list'>
           {taskList.length > 0 ? taskList.map((item,id)=>(
-            <TaskNotification data={item} settaskList={settaskList} taskList={taskList}/>
+            <TaskNotification data={item} settaskList={settaskList} taskList={taskList} characteristicCache={characteristicCache} />
           )):<div>
               no task scheduled
             </div>}

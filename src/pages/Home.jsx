@@ -1,5 +1,5 @@
-import React, { useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useContext, useEffect, useState } from "react";
+import { json, useNavigate } from "react-router-dom";
 import './home.css'
 import Drawer from "../components/Drawer";
 //icons
@@ -11,12 +11,25 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import CancelIcon from '@mui/icons-material/Cancel';
+import { BluetoothContext } from "../context";
 
 function Home({ activeDrawer, setactiveDrawer }) {
-  const [deviceCache, setdeviceCache] = useState("");
-  const [characteristicCache, setcharacteristicCache] = useState(null);
+  const {deviceCache, setdeviceCache, characteristicCache, setcharacteristicCache} = useContext(BluetoothContext)
   const navigate = useNavigate();
 
+
+  // React.useEffect(()=>{
+  //   const localDeviceCache = JSON.stringify(localStorage.getItem("devicecache"))
+  //   const localCharacteristicsCache = JSON.stringify(localStorage.getItem("characteristics"))
+  //   if (localDeviceCache && localCharacteristicsCache) {
+  //     setdeviceCache(localDeviceCache)
+  //     setcharacteristicCache(localCharacteristicsCache)
+  //   }else{
+  //     setdeviceCache(null)
+  //     setcharacteristicCache(null)
+  //   }
+
+  // },[])
   //Disconnect Event handler
   const connectClick = () => {
     console.log(deviceCache, "hiiiii")
@@ -28,7 +41,7 @@ function Home({ activeDrawer, setactiveDrawer }) {
   };
   //Receive response Event handler
   const handleClick = (command) => {
-
+    
 
     // send(e.target.value);
   };
@@ -52,7 +65,7 @@ function Home({ activeDrawer, setactiveDrawer }) {
       .then((device) => {
         console.log('"' + device.name + '" bluetooth device selected');
         setdeviceCache(device);
-
+        // localStorage.setItem("devicecache",JSON.stringify(device))
         return deviceCache;
       });
   }
@@ -80,7 +93,7 @@ function Home({ activeDrawer, setactiveDrawer }) {
       .then((characteristic) => {
         console.log("Characteristic found");
         setcharacteristicCache(characteristic);
-
+        // localStorage.setItem("characteristics",JSON.stringify(characteristic))
         return characteristicCache;
       });
   }
@@ -100,7 +113,7 @@ function Home({ activeDrawer, setactiveDrawer }) {
         );
       }
     }
-
+    // localStorage.clear()
     setcharacteristicCache(null);
     setdeviceCache(null);
   }
